@@ -2,6 +2,7 @@ package edu.calpoly.womangr.mangr.rest;
 
 import edu.calpoly.womangr.mangr.model.Chapter;
 import edu.calpoly.womangr.mangr.model.Manga;
+import edu.calpoly.womangr.mangr.model.MangaByGenreResults;
 import edu.calpoly.womangr.mangr.model.MangaResults;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,7 +26,7 @@ public interface ApiInterface {
 
     // GET MANGA BY GENRE
     @GET("{siteid}/search/genres/{genreid}")
-    Call<MangaResults> getMangaByGenres(@Path("siteid") String siteID, @Path("genreid") String genreID, @Query("mashape-key") String apiKey);
+    Call<MangaByGenreResults> getMangaByGenres(@Path("siteid") String siteID, @Path("genreid") String genreID, @Query("mashape-key") String apiKey);
 
     //GET CHAPTER
     @GET("{siteid}/manga/{mangaid}/{chapterid}")

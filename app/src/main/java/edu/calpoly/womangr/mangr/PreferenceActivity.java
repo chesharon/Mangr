@@ -7,6 +7,8 @@ import android.util.Log;
 import java.util.List;
 
 import edu.calpoly.womangr.mangr.model.Manga;
+import edu.calpoly.womangr.mangr.model.MangaByGenre;
+import edu.calpoly.womangr.mangr.model.MangaByGenreResults;
 import edu.calpoly.womangr.mangr.model.MangaResults;
 import edu.calpoly.womangr.mangr.rest.ApiClient;
 import edu.calpoly.womangr.mangr.rest.ApiInterface;
@@ -16,7 +18,8 @@ import retrofit2.Response;
 
 public class PreferenceActivity extends AppCompatActivity {
 
-    private String API_KEY = "ahE5pYl9OfmshytVyaNSJkDII";
+    private String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
+    private static final String TAG = PreferenceActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +27,30 @@ public class PreferenceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preference);
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<MangaResults> call = apiInterface.getMangaList("mangareader.net", API_KEY);
-        call.enqueue(new Callback<MangaResults>() {
+        Log.d(TAG, "1");
+
+        //Call<MangaResults> call = apiInterface.getMangaList("mangareader.net", API_KEY);
+        Call<MangaByGenreResults> call = apiInterface.getMangaByGenres("mangareader.net", "action", API_KEY);
+        Log.d(TAG, "2");
+        Log.d(TAG, call.request().toString());
+        Log.d(TAG, call.request().url().toString());
+        call.enqueue(new Callback<MangaByGenreResults>() {
             @Override
-            public void onResponse(Call<MangaResults> call, Response<MangaResults> response) {
-                List<Manga> mangas = response.body().getResults();
+            public void onResponse(Call<MangaByGenreResults> call, Response<MangaByGenreResults> response) {
+                Log.d(TAG, "response" + response.toString());
+                Log.d(TAG, "call request tostring:" + call.request().toString());
+                Log.d(TAG, "response.message:" + response.message());
+                Log.d(TAG, "response.body.tostring: " + response.body().toString());
+                Log.d(TAG, "GOT HERE");
+                //List<Manga> mangas = response.body().getResults();
+                List<MangaByGenre> mangasByGenres = response.body().getMangasByGenre();
+                Log.d(TAG, mangasByGenres.toString());
                 int statusCode = response.code();
                 Log.e("Tag", String.valueOf(statusCode));
             }
 
             @Override
-            public void onFailure(Call<MangaResults> call, Throwable t) {
+            public void onFailure(Call<MangaByGenreResults> call, Throwable t) {
                 // Log error here since request failed
                 Log.e("Failed", t.toString());
             }
