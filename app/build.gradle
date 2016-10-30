@@ -31,3 +31,17 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     testCompile 'junit:junit:4.12'
 }
+
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+    }
+    repositories {
+        jcenter()
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
