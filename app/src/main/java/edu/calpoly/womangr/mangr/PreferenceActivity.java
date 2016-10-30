@@ -24,22 +24,13 @@ public class PreferenceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preference);
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Log.d(TAG, "1");
-
-        //Call<MangaResults> call = apiInterface.getMangaList("mangareader.net", API_KEY);
         Call<List<MangaByGenre>> call = apiInterface.getMangaByGenres("mangareader.net", "action", API_KEY);
-        Log.d(TAG, "2");
-        Log.d(TAG, call.request().toString());
+
         Log.d(TAG, call.request().url().toString());
+
         call.enqueue(new Callback<List<MangaByGenre>>() {
             @Override
             public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
-                Log.d(TAG, "response" + response.toString());
-                Log.d(TAG, "call request tostring:" + call.request().toString());
-                Log.d(TAG, "response.message:" + response.message());
-                Log.d(TAG, "response.body.tostring: " + response.body().toString());
-                Log.d(TAG, "GOT HERE");
-                //List<Manga> mangas = response.body().getResults();
                 List<MangaByGenre> mangasByGenres = response.body();
                 for (MangaByGenre m : mangasByGenres) {
                     Log.d(TAG, m.getName());
