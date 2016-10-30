@@ -1,8 +1,12 @@
 package edu.calpoly.womangr.mangr.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Page {
 
+    @SerializedName("pageId")
     private int pageId;
+    @SerializedName("url")
     private String url;
 
     public Page(int pageId, String url) {

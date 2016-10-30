@@ -9,37 +9,26 @@ import java.util.List;
 public class Manga {
 
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("href")
-    @Expose
     private String href;
     @SerializedName("author")
-    @Expose
     private List<String> author = new ArrayList<String>();
     @SerializedName("artist")
-    @Expose
     private List<String> artist = new ArrayList<String>();
     @SerializedName("status")
-    @Expose
     private String status;
     @SerializedName("yearOfRelease")
-    @Expose
     private int yearOfRelease;
     @SerializedName("genres")
-    @Expose
     private List<String> genres = new ArrayList<String>();
     @SerializedName("info")
-    @Expose
     private String info;
     @SerializedName("cover")
-    @Expose
     private String cover;
     @SerializedName("lastUpdate")
-    @Expose
     private String lastUpdate;
     @SerializedName("chapters")
-    @Expose
     private List<Chapter> chapters = new ArrayList<Chapter>();
 
     public Manga(String name, String href, List<String> author, List<String> artist, String status,
