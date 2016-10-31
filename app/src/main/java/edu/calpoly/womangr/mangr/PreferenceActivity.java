@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class PreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
 
+        // example call to getMangaByGenres API
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<List<MangaByGenre>> call = apiInterface.getMangaByGenres("mangareader.net", "action", API_KEY);
 
@@ -50,22 +53,40 @@ public class PreferenceActivity extends AppCompatActivity {
             }
         });
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+        // manGO! button
+        final Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Intent intent =
+                                new Intent(PreferenceActivity.this, RecommendationActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        // Bottom navigation bar
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView)
                 findViewById(R.id.bottom_navigation);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        final Intent intent;
+
                         switch (item.getItemId()) {
                             case R.id.action_likes:
-
+                                intent = new Intent(PreferenceActivity.this, LikesActivity.class);
+                                startActivity(intent);
                                 break;
                             case R.id.action_dislikes:
-
+                                intent = new Intent(PreferenceActivity.this, DislikesActivity.class);
+                                startActivity(intent);
                                 break;
                             case R.id.action_rec:
-                                Intent intent = new Intent(PreferenceActivity.this, RecommendationActivity.class);
+                                intent = new Intent(PreferenceActivity.this, RecommendationActivity.class);
                                 startActivity(intent);
                                 break;
                         }

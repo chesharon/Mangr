@@ -2,7 +2,9 @@
     <string name="app_name">Mangr</string>
     <string name="likes">Likes</string>
     <string name="dislikes">Dislikes</string>
-    <string name="recs">Recs</string>
+    <string name="recs">Recommendations</string>
     <string name="preferences">Preferences</string>
+    <string name="mango">manGO!</string>
+    <string name="genre_s">Genre(s):</string>
 
 </resources>

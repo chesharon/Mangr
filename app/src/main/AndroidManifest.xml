@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecommendationActivity"></activity>
+        <activity android:name=".RecommendationActivity" />
+        <activity android:name=".LikesActivity" />
+        <activity android:name=".DislikesActivity"></activity>
     </application>
 
 </manifest>
