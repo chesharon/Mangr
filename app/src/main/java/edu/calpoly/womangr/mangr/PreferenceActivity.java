@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.List;
 
+import edu.calpoly.womangr.mangr.model.Genre;
 import edu.calpoly.womangr.mangr.model.MangaByGenre;
 import edu.calpoly.womangr.mangr.rest.ApiClient;
 import edu.calpoly.womangr.mangr.rest.ApiInterface;
@@ -20,38 +23,44 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PreferenceActivity extends AppCompatActivity {
-
-    private String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
     private static final String TAG = PreferenceActivity.class.getSimpleName();
+    private static final String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
 
-        // example call to getMangaByGenres API
+        // textview to display genres
+        final TextView textView = (TextView) findViewById(R.id.preferences_genres_text);
+
+        // call to getGenreList API
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<MangaByGenre>> call = apiInterface.getMangaByGenres("mangareader.net", "action", API_KEY);
-
+        Call<List<Genre>> call = apiInterface.getGenreList("mangareader.net", API_KEY);
         Log.d(TAG, call.request().url().toString());
-
-        call.enqueue(new Callback<List<MangaByGenre>>() {
+        call.enqueue(new Callback<List<Genre>>() {
             @Override
-            public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
-                List<MangaByGenre> mangasByGenres = response.body();
-                for (MangaByGenre m : mangasByGenres) {
-                    Log.d(TAG, m.getName());
+            public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
+                String genresStr = "";
+                List<Genre> genres = response.body();
+                for (Genre g : genres) {
+                    Log.d(TAG, g.getGenre());
+                    genresStr = genresStr + g.getGenre() + ", ";
                 }
+                genresStr = genresStr.substring(0, genresStr.length() - 2);
                 int statusCode = response.code();
                 Log.e("Tag", String.valueOf(statusCode));
+                textView.setText(genresStr);
             }
 
             @Override
-            public void onFailure(Call<List<MangaByGenre>> call, Throwable t) {
+            public void onFailure(Call<List<Genre>> call, Throwable t) {
                 // Log error here since request failed
                 Log.e("Failed", t.toString());
             }
         });
+
+        final EditText editText = (EditText) findViewById(R.id.preferences_genres_edit_text);
 
         // manGO! button
         final Button button = (Button) findViewById(R.id.button);
@@ -61,6 +70,7 @@ public class PreferenceActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         final Intent intent =
                                 new Intent(PreferenceActivity.this, RecommendationActivity.class);
+                        intent.putExtra("preferred_genres", editText.getText().toString());
                         startActivity(intent);
                     }
                 }

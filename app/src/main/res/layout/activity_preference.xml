@@ -8,10 +8,32 @@
     android:orientation="vertical"
     tools:context="edu.calpoly.womangr.mangr.PreferenceActivity">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/genre_s"/>
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/genre_s"/>
+
+        <TextView
+            android:id="@+id/preferences_genres_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/preferences_genres_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="set your genre(s)"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +45,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mango"
-            android:id="@+id/button" />
+            android:id="@+id/button"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottom_navigation"
