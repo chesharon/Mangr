@@ -44,6 +44,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAllCaps="false"
             android:text="@string/mango"
             android:id="@+id/button"
             android:layout_marginBottom="@dimen/activity_horizontal_margin"
@@ -51,15 +52,12 @@
             android:textColor="@color/white"
             android:background="@color/colorPrimaryDark"/>
 
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:itemBackground="@color/colorPrimary"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            app:menu="@menu/bottom_navigation_main" />
+            android:layout_height="60dp"
+            android:gravity="bottom"
+            app:bb_tabXmlResource="@xml/bottombar_tabs"/>
     </LinearLayout>
-
 
 </LinearLayout>

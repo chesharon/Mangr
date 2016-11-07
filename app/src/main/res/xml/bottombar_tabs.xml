@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_likes"
+        icon="@drawable/thumb_up"
+        title="@string/likes" />
+    <tab
+        id="@+id/tab_dislikes"
+        icon="@drawable/thumb_down"
+        title="@string/dislikes" />
+    <tab
+        id="@+id/tab_recs"
+        icon="@drawable/cursor_pointer"
+        title="@string/recs" />
+    <tab
+        id="@+id/tab_prefs"
+        icon="@drawable/settings"
+        title="@string/preferences" />
+</tabs>
