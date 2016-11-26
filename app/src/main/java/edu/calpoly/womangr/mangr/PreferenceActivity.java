@@ -72,6 +72,7 @@ public class PreferenceActivity extends AppCompatActivity {
                                 new Intent(PreferenceActivity.this, RecommendationActivity.class);
                         intent.putExtra("preferred_genres", editText.getText().toString());
                         startActivity(intent);
+                        finish();
                     }
                 }
         );
@@ -88,14 +89,17 @@ public class PreferenceActivity extends AppCompatActivity {
                             case R.id.tab_likes:
                                 intent = new Intent(PreferenceActivity.this, LikesActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                             case R.id.tab_dislikes:
                                 intent = new Intent(PreferenceActivity.this, DislikesActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                             case R.id.tab_recs:
                                 intent = new Intent(PreferenceActivity.this, RecommendationActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                             case R.id.tab_prefs:
                                 break;

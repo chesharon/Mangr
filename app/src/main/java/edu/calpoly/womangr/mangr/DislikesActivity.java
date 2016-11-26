@@ -30,16 +30,19 @@ public class DislikesActivity extends AppCompatActivity {
                             case R.id.tab_likes:
                                 intent = new Intent(DislikesActivity.this, LikesActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                             case R.id.tab_dislikes:
                                 break;
                             case R.id.tab_recs:
                                 intent = new Intent(DislikesActivity.this, RecommendationActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                             case R.id.tab_prefs:
                                 intent = new Intent(DislikesActivity.this, PreferenceActivity.class);
                                 startActivity(intent);
+                                finish();
                                 break;
                         }
                     }
