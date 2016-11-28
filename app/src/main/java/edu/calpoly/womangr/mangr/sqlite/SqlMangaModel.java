@@ -1,7 +1,6 @@
 package edu.calpoly.womangr.mangr.sqlite;
 
 public class SqlMangaModel {
-    private int id;
     private String name;
     private String href;
     private String author;
@@ -17,20 +16,6 @@ public class SqlMangaModel {
     }
 
     // Constructor
-    public SqlMangaModel(int id, String name, String href, String author, String artist, String status,
-                         String genres, String info, String cover) {
-        this.id = id;
-        this.name = name;
-        this.href = href;
-        this.author = author;
-        this.artist = artist;
-        this.status = status;
-        this.genres = genres;
-        this.info = info;
-        this.cover = cover;
-    }
-
-    // ID-less constructor
     public SqlMangaModel(String name, String href, String author, String artist, String status,
                          String genres, String info, String cover) {
         this.name = name;
@@ -41,14 +26,6 @@ public class SqlMangaModel {
         this.genres = genres;
         this.info = info;
         this.cover = cover;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getHref() {
