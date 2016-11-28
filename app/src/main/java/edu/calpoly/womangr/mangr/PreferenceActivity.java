@@ -75,9 +75,8 @@ public class PreferenceActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         final Intent intent =
                                 new Intent(PreferenceActivity.this, RecommendationActivity.class);
-                        // TODO: format string for request correctly
-                        intent.putExtra("preferred_genres", selectedGenres.toString());
-                        Log.d(TAG, selectedGenres.toString());
+                        intent.putExtra("preferred_genres", formatGenreString());
+                        Log.d(TAG, formatGenreString());
                         startActivity(intent);
                         finish();
                     }
@@ -114,5 +113,18 @@ public class PreferenceActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    public String formatGenreString() {
+        String genres = "[";
+        for (String s : selectedGenres) {
+            genres += '"' + s + '"'  + ",";
+        }
+        if (genres.length() > 0) {
+            genres = genres.substring(0, genres.length() - 1);
+        }
+        genres += "]";
+
+        return genres;
     }
 }

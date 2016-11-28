@@ -8,18 +8,22 @@
     tools:context="edu.calpoly.womangr.mangr.RecommendationActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/recommendation_text"
-        android:padding="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/recs"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="end|bottom"
         android:orientation="vertical">
+
+        <com.wenchao.cardstack.CardStack
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:layout_marginTop="60dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            />
 
         <com.roughike.bottombar.BottomBar
             android:id="@+id/bottom_bar"

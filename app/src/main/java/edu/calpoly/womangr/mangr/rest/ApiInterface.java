@@ -27,11 +27,14 @@ public interface ApiInterface {
     Call<Manga> getMangaDetails(@Path("siteid") String siteID, @Path("mangaid") String mangaID, @Query("mashape-key") String apiKey);
 
     // GET MANGAS BY GENRE
-    @GET("{siteid}/search/genres/{genreid}")
+    @GET("{siteid}/search/genres/{genreid}?cover=1&info=1\"")
     Call<List<MangaByGenre>> getMangaByGenres(@Path("siteid") String siteID, @Path("genreid") String genreID, @Query("mashape-key") String apiKey);
 
     //GET CHAPTER
     @GET("{siteid}/manga/{mangaid}/{chapterid}")
     Call<Chapter> getChapter(@Path("siteid") String siteID, @Path("mangaid") String mangaID, @Path("chapterid") int chapterID, @Query("mashape-key") String apiKey);
 
+    //SEARCH
+    @GET("{siteid}/search?cover=1&info=1")
+    Call<List<MangaByGenre>> search(@Path("siteid") String siteID, @Query("g") String genreIDS, @Query("mashape-key") String apiKey);
 }
