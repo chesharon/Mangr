@@ -89,6 +89,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    public void addLike(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MANGA_ID, mangaId);
+        db.insert(TABLE_LIKES, null, values);
+        db.close();
+    }
+
+    public void addDisike(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MANGA_ID, mangaId);
+        db.insert(TABLE_DISLIKES, null, values);
+        db.close();
+    }
+
     public SqlMangaModel getManga(String mangaId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -155,7 +171,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return hasObject;
     }
 
-    // TODO: !!!!!
     public List<SqlMangaModel> getAllLikes() {
         ArrayList<SqlMangaModel> likes = new ArrayList<>();
 
