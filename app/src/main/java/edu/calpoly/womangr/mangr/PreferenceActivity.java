@@ -4,15 +4,17 @@ import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import edu.calpoly.womangr.mangr.model.Genre;
@@ -26,13 +28,23 @@ public class PreferenceActivity extends AppCompatActivity {
     private static final String TAG = PreferenceActivity.class.getSimpleName();
     private static final String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
 
+    private List<Genre> genres = new ArrayList<>();
+    public HashSet<String> selectedGenres = new HashSet<>();
+    public GenresAdapter genresAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
 
-        // textview to display genres
-        final TextView textView = (TextView) findViewById(R.id.preferences_genres_text);
+        // genres grid
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.genres_grid);
+        assert recyclerView != null;
+        recyclerView.setLayoutManager(new GridLayoutManager(
+                PreferenceActivity.this,
+                getResources().getInteger(R.integer.genres_num_columns)));
+        genresAdapter = new GenresAdapter(genres);
+        recyclerView.setAdapter(genresAdapter);
 
         // call to getGenreList API
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -41,16 +53,11 @@ public class PreferenceActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Genre>>() {
             @Override
             public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
-                String genresStr = "";
-                List<Genre> genres = response.body();
-                for (Genre g : genres) {
-                    Log.d(TAG, g.getGenre());
-                    genresStr = genresStr + g.getGenre() + ", ";
-                }
-                genresStr = genresStr.substring(0, genresStr.length() - 2);
+                genres.addAll(response.body());
+                assert genres != null;
+                genresAdapter.notifyDataSetChanged();
                 int statusCode = response.code();
-                Log.e("Tag", String.valueOf(statusCode));
-                textView.setText(genresStr);
+                Log.e(TAG, String.valueOf(statusCode));
             }
 
             @Override
@@ -60,8 +67,6 @@ public class PreferenceActivity extends AppCompatActivity {
             }
         });
 
-        final EditText editText = (EditText) findViewById(R.id.preferences_genres_edit_text);
-
         // manGO! button
         final Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(
@@ -70,7 +75,9 @@ public class PreferenceActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         final Intent intent =
                                 new Intent(PreferenceActivity.this, RecommendationActivity.class);
-                        intent.putExtra("preferred_genres", editText.getText().toString());
+                        // TODO: format string for request correctly
+                        intent.putExtra("preferred_genres", selectedGenres.toString());
+                        Log.d(TAG, selectedGenres.toString());
                         startActivity(intent);
                         finish();
                     }

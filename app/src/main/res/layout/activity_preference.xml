@@ -10,7 +10,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="@integer/preferences_genres_layout_weight"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
@@ -21,23 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/genre_s"/>
-
-        <TextView
-            android:id="@+id/preferences_genres_text"
+        
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/genres_grid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:id="@+id/preferences_genres_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="set your genre(s)"/>
+            android:layout_height="match_parent"
+            app:layoutManager="GridLayoutManager"
+            app:spanCount="2">
+        </android.support.v7.widget.RecyclerView>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="@integer/preferences_bottom_layout_weight"
         android:gravity="end|bottom"
         android:orientation="vertical">
 

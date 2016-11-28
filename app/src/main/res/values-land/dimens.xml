@@ -1,0 +1,5 @@
+<resources>
+    <integer name="genres_num_columns">5</integer>
+    <integer name="preferences_genres_layout_weight">60</integer>
+    <integer name="preferences_bottom_layout_weight">40</integer>
+</resources>
