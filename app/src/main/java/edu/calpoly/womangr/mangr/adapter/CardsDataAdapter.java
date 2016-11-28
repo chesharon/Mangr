@@ -12,9 +12,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import edu.calpoly.womangr.mangr.R;
-import edu.calpoly.womangr.mangr.model.Manga;
+import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
-public class CardsDataAdapter extends ArrayAdapter<Manga> {
+public class CardsDataAdapter extends ArrayAdapter<SqlMangaModel> {
 
     private TextView title, genres, authors, artists, status, summary;
     private ImageView cover;
@@ -38,39 +38,15 @@ public class CardsDataAdapter extends ArrayAdapter<Manga> {
 
         //Set Genre(s)
         genres = (TextView) (convertView.findViewById(R.id.genres));
-        String g = "";
-        for (String s : getItem(position).getGenres()) {
-            g += (s.substring(0, 1).toUpperCase() + s.substring(1));
-            g += ", ";
-        }
-        if (g.length() > 0) {
-            g = g.substring(0, g.length() - 2);
-        }
-        genres.setText(Html.fromHtml("<b>" + "Genre(s): " + "</b>" + g));
+        genres.setText(Html.fromHtml("<b>" + "Genre(s): " + "</b>" + getItem(position).getGenres()));
 
         //Set Author(s)
         authors = (TextView) (convertView.findViewById(R.id.authors));
-        String a = "";
-        for (String s : getItem(position).getAuthor()) {
-            a += (s.substring(0, 1).toUpperCase() + s.substring(1));
-            a += ", ";
-        }
-        if (a.length() > 0) {
-            a = a.substring(0, a.length() - 2);
-        }
-        authors.setText(Html.fromHtml("<b>" + "Author(s): " + "</b>" + a));
+        authors.setText(Html.fromHtml("<b>" + "Author(s): " + "</b>" + getItem(position).getAuthor()));
 
         //Set Artist(s)
         artists = (TextView) (convertView.findViewById(R.id.artists));
-        String ar = "";
-        for (String s : getItem(position).getArtist()) {
-            ar += (s.substring(0, 1).toUpperCase() + s.substring(1));
-            ar += ", ";
-        }
-        if (ar.length() > 0) {
-            ar = ar.substring(0, ar.length() - 2);
-        }
-        artists.setText(Html.fromHtml("<b>" + "Artist(s): " + "</b>" + ar));
+        artists.setText(Html.fromHtml("<b>" + "Artist(s): " + "</b>" + getItem(position).getArtist()));
 
         //Set Status
         status = (TextView) (convertView.findViewById(R.id.status));
