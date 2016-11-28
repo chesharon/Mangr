@@ -28,6 +28,8 @@ public class RecommendationActivity extends AppCompatActivity {
     private static final String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
     private CardStack cardStack;
     private CardsDataAdapter cardAdapter;
+    private DatabaseHandler db = new DatabaseHandler(this);
+    //public static String currentMangaID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,43 +56,44 @@ public class RecommendationActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<MangaByGenre>>() {
             @Override
             public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
-                final DatabaseHandler db = new DatabaseHandler(RecommendationActivity.this);
+                //final DatabaseHandler db = new DatabaseHandler(RecommendationActivity.this);
                 List<MangaByGenre> mangasByGenres = response.body();
-
                 // get the manga with getMangaDetails API or from database
                 for (MangaByGenre m : mangasByGenres) {
+                    Log.d("MANGA: ", m.getName());
                     // filter out mangas already liked or disliked
-                    if (db.hasLike(m.getMangaId()) || db.hasDisLike(m.getMangaId())) return;
+                    if (!(db.hasLike(m.getMangaId()) || db.hasDisLike(m.getMangaId()))) {
 
-                    // if database already has manga, retrieve from it
-                    if (db.hasManga(m.getMangaId())) {
-                        Log.d(TAG, "db has manga: " + m.getMangaId());
-                        cardAdapter.add(db.getManga(m.getMangaId()));
-                    }
-                    else { // else make getMangaDetails API call
-                        Log.d(TAG, "db doesn't have manga: " + m.getMangaId());
+                        // if database already has manga, retrieve from it
+                        if (db.hasManga(m.getMangaId())) {
+                            Log.d(TAG, "db has manga: " + m.getMangaId());
+                            cardAdapter.add(db.getManga(m.getMangaId()));
+                        }
+                        else { // else make getMangaDetails API call
+                            Log.d(TAG, "db doesn't have manga: " + m.getMangaId());
 
-                        Call<Manga> mangaCall = apiInterface.getMangaDetails("mangareader.net", m.getMangaId(), API_KEY);
+                            Call<Manga> mangaCall = apiInterface.getMangaDetails("mangareader.net", m.getMangaId(), API_KEY);
 
-                        mangaCall.enqueue(new Callback<Manga>() {
-                            @Override
-                            public void onResponse(Call<Manga> call, Response<Manga> response) {
-                                Manga manga = response.body();
-                                SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
-                                        formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
-                                        manga.getStatus(), formatInfoList(manga.getGenres()),
-                                        manga.getInfo(), manga.getCover());
+                            mangaCall.enqueue(new Callback<Manga>() {
+                                @Override
+                                public void onResponse(Call<Manga> call, Response<Manga> response) {
+                                    Manga manga = response.body();
+                                    SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
+                                            formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
+                                            manga.getStatus(), formatInfoList(manga.getGenres()),
+                                            manga.getInfo(), manga.getCover());
 
-                                db.addManga(sqlMangaModel);
-                                cardAdapter.add(sqlMangaModel);
-                            }
+                                    db.addManga(sqlMangaModel);
+                                    cardAdapter.add(sqlMangaModel);
+                                }
 
-                            @Override
-                            public void onFailure(Call<Manga> call, Throwable t) {
-                                // Log error here since request failed
-                                Log.e("Failed", t.toString());
-                            }
-                        });
+                                @Override
+                                public void onFailure(Call<Manga> call, Throwable t) {
+                                    // Log error here since request failed
+                                    Log.e("Failed", t.toString());
+                                }
+                            });
+                        }
                     }
 
                 }
@@ -106,7 +109,46 @@ public class RecommendationActivity extends AppCompatActivity {
         });
 
         cardStack.setAdapter(cardAdapter);
-        cardStack.setListener(new CardStackListener());
+        cardStack.setListener(
+                new CardStack.CardEventListener() {
+                    @Override
+                    public boolean swipeEnd(int section, float distance) {
+                        if (section == 1 || section == 3) {
+                            Log.d("LIKED", "this manga");
+                        }
+                        if (section == 0 || section == 2) {
+                            Log.d("DISLIKED", "this manga");
+                        }
+
+                        return (distance > 300) ? true : false;
+                    }
+
+                    @Override
+                    public boolean swipeStart(int section, float distance) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean swipeContinue(int section, float distanceX, float distanceY) {
+                        return false;
+                    }
+
+                    @Override
+                    public void discarded(int mIndex, int direction) {
+                        if (direction == 1 || direction == 3) {
+                            db.addLike(cardAdapter.getItem(mIndex - 1).getHref());
+                        }
+                        if (direction == 0 || direction == 2) {
+                            db.addDislike(cardAdapter.getItem(mIndex - 1).getHref());
+                        }
+                    }
+
+                    @Override
+                    public void topCardTapped() {
+
+                    }
+                }
+        );
 
         // Bottom navigation bar
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);

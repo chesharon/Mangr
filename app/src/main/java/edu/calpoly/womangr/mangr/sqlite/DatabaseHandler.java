@@ -97,7 +97,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addDisike(String mangaId) {
+    public void addDislike(String mangaId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_MANGA_ID, mangaId);

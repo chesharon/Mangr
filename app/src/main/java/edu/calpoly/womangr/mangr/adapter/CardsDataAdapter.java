@@ -11,14 +11,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.calpoly.womangr.mangr.DislikesActivity;
 import edu.calpoly.womangr.mangr.R;
+import edu.calpoly.womangr.mangr.RecommendationActivity;
 import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
 public class CardsDataAdapter extends ArrayAdapter<SqlMangaModel> {
 
     private TextView title, genres, authors, artists, status, summary;
     private ImageView cover;
-
+    
     public CardsDataAdapter(Context context, int resource) {
         super(context, resource);
     }
@@ -26,6 +28,7 @@ public class CardsDataAdapter extends ArrayAdapter<SqlMangaModel> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         //Set Title
         title = (TextView)(convertView.findViewById(R.id.title));
         title.setText(getItem(position).getName());

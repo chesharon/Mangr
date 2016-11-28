@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private static int TIME = 2000;
+    private static int TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

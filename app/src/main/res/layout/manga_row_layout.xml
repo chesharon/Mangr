@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="5dp">
 
     <!--  ListRow Left side Thumbnail image -->
     <LinearLayout
+        android:id="@+id/row"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -23,7 +24,7 @@
             android:layout_marginRight="5dp">
 
             <ImageView
-                android:id="@+id/list_image"
+                android:id="@+id/manga_cover"
                 android:layout_width="75dp"
                 android:layout_height="75dp" />
 
@@ -42,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/thumbnail"
                 android:layout_toRightOf="@+id/thumbnail"
-                android:text="Naruto"
                 android:textColor="#040404"
                 android:typeface="sans"
                 android:textSize="15dp"
@@ -54,10 +54,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/manga_title"
-                android:text="Author(s): Kishimito-masashi"
                 android:textColor="#343434"
-                android:textSize="10dp"
-                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/thumbnail" />
 
             <!-- Artist Name -->
@@ -66,10 +65,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/manga_authors"
-                android:text="Artist(s): Kishimoto-masashi"
                 android:textColor="#343434"
-                android:textSize="10dp"
-                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/thumbnail" />
 
         </LinearLayout>
@@ -82,7 +80,7 @@
 
             <!-- Right-end Arrow -->
             <ImageView
-                android:id="@+id/arrow"
+                android:id="@+id/arrow_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/arrow_down"
@@ -95,4 +93,66 @@
 
     </LinearLayout>
 
+    <com.github.aakira.expandablelayout.ExpandableLinearLayout
+        android:id="@+id/expandableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/row"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="vertical"
+        app:ael_duration="400"
+        app:ael_expanded="false" >
+
+        <LinearLayout
+            android:id="@+id/expand_genres_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/expand_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/expand_genres_layout"
+            android:id="@+id/expand_status_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/expand_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_below="@+id/expand_status_layout"
+            android:id="@+id/expand_summary_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/expand_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp">
+
+            </TextView>
+
+        </LinearLayout>
+
+    </com.github.aakira.expandablelayout.ExpandableLinearLayout>
 </LinearLayout>
