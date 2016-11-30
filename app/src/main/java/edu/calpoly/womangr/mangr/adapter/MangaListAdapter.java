@@ -2,8 +2,10 @@ package edu.calpoly.womangr.mangr.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,6 +63,7 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
         holder.expandableLayout.setInRecyclerView(true);
         holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_INTERPOLATOR));
         holder.expandableLayout.setExpanded(expandState.get(position));
+        Log.d("expanded", String.valueOf(expandState.get(position)));
         holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {

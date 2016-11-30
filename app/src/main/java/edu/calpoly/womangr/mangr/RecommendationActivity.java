@@ -29,7 +29,6 @@ public class RecommendationActivity extends AppCompatActivity {
     private CardStack cardStack;
     private CardsDataAdapter cardAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
-    //public static String currentMangaID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,6 @@ public class RecommendationActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<MangaByGenre>>() {
             @Override
             public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
-                //final DatabaseHandler db = new DatabaseHandler(RecommendationActivity.this);
                 List<MangaByGenre> mangasByGenres = response.body();
                 // get the manga with getMangaDetails API or from database
                 for (MangaByGenre m : mangasByGenres) {
@@ -80,7 +78,7 @@ public class RecommendationActivity extends AppCompatActivity {
                                     Manga manga = response.body();
                                     SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
                                             formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
-                                            manga.getStatus(), formatInfoList(manga.getGenres()),
+                                            formatString(manga.getStatus()), formatInfoList(manga.getGenres()),
                                             manga.getInfo(), manga.getCover());
 
                                     db.addManga(sqlMangaModel);
@@ -109,6 +107,7 @@ public class RecommendationActivity extends AppCompatActivity {
         });
 
         cardStack.setAdapter(cardAdapter);
+        cardStack.setVisibleCardNum(2);
         cardStack.setListener(
                 new CardStack.CardEventListener() {
                     @Override
@@ -135,6 +134,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
                     @Override
                     public void discarded(int mIndex, int direction) {
+                        Log.d("index", String.valueOf(mIndex));
                         if (direction == 1 || direction == 3) {
                             db.addLike(cardAdapter.getItem(mIndex - 1).getHref());
                         }
@@ -182,11 +182,15 @@ public class RecommendationActivity extends AppCompatActivity {
         );
     }
 
+    private String formatString(String str) {
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+
     private String formatInfoList(List<String> list) {
         String rt = "";
         if (list.size() > 0) {
             for (String s : list) {
-                rt += s + ", ";
+                rt += (s.substring(0, 1).toUpperCase() + s.substring(1)) + ", ";
             }
             rt = rt.substring(0, rt.length() - 2);
         }

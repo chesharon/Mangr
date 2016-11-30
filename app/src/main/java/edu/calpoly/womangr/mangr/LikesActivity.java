@@ -6,17 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.calpoly.womangr.mangr.adapter.MangaListAdapter;
 import edu.calpoly.womangr.mangr.sqlite.DatabaseHandler;
-import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
 public class LikesActivity extends AppCompatActivity {
 
