@@ -21,14 +21,12 @@ public class LikesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
 
-        Intent intent = getIntent();
-
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.manga_likes_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseHandler db = new DatabaseHandler(this);
 
-        recyclerView.setAdapter(new MangaListAdapter(db.getAllLikes()));
+        recyclerView.setAdapter(new MangaListAdapter("likes", db.getAllLikes()));
 
         // Bottom navigation bar
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);

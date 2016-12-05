@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Dislikes table. Reuses KEY_MANGA_ID
     private static final String TABLE_DISLIKES = "dislikes";
 
+    // Recommendations table. Stores mangaIds of remaining recommended mangas for a session.
+    // 0 entries indicates inactive recommendation session. Reuses KEY_MANGA_ID
+    private static final String TABLE_RECS = "recommendations";
+
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -54,10 +57,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_MANGA_ID + " TEXT PRIMARY KEY)";
         String CREATE_DISLIKES_TABLE = "CREATE TABLE " + TABLE_DISLIKES + "("
                 + KEY_MANGA_ID + " TEXT PRIMARY KEY)";
+        String CREATE_RECS_TABLE = "CREATE TABLE " + TABLE_RECS + "("
+                + KEY_MANGA_ID + " TEXT PRIMARY KEY)";
 
         db.execSQL(CREATE_MANGAS_TABLE);
         db.execSQL(CREATE_LIKES_TABLE);
         db.execSQL(CREATE_DISLIKES_TABLE);
+        db.execSQL(CREATE_RECS_TABLE);
     }
 
     @Override
@@ -66,6 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MANGAS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DISLIKES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECS);
 
         // Create tables again
         onCreate(db);
@@ -102,6 +109,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_MANGA_ID, mangaId);
         db.insert(TABLE_DISLIKES, null, values);
+        db.close();
+    }
+
+    public void addRecommendation(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MANGA_ID, mangaId);
+        db.insert(TABLE_RECS, null, values);
+        db.close();
+    }
+
+    public void deleteLike(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LIKES, KEY_MANGA_ID + " = ?", new String[] { mangaId });
+        db.close();
+    }
+
+    public void deleteDislike(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_DISLIKES, KEY_MANGA_ID + " = ?", new String[] { mangaId });
+        db.close();
+    }
+
+    public void deleteRecommendation(String mangaId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECS, KEY_MANGA_ID + " = ?", new String[] { mangaId });
+        db.close();
+    }
+
+    public void deleteAllRecommendations() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECS, null, null);
         db.close();
     }
 
@@ -183,6 +222,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 likes.add(getManga(cursor.getString(0)));
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
+        db.close();
         return likes;
     }
 
@@ -199,6 +241,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
+        db.close();
         return dislikes;
+    }
+
+    public List<SqlMangaModel> getAllRecommendations() {
+        ArrayList<SqlMangaModel> recs = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_RECS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                recs.add(getManga(cursor.getString(0)));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return recs;
+    }
+
+    public boolean recommendationsIsEmpty() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String countQuery = "SELECT count(*) FROM " + TABLE_RECS;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.moveToFirst();
+        boolean isEmpty = cursor.getInt(0) == 0;
+
+        cursor.close();
+        db.close();
+        return  isEmpty;
     }
 }

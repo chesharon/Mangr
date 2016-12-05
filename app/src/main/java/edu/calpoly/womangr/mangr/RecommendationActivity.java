@@ -5,6 +5,7 @@ import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -26,6 +27,7 @@ import retrofit2.Response;
 public class RecommendationActivity extends AppCompatActivity {
     private static final String TAG = RecommendationActivity.class.getSimpleName();
     private static final String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
+    private TextView noMoreRecsTextView;
     private CardStack cardStack;
     private CardsDataAdapter cardAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
@@ -35,76 +37,88 @@ public class RecommendationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
 
+        noMoreRecsTextView = (TextView) findViewById(R.id.no_more_recs_textview);
+        hideNoRecommendations();
+
         final Intent intent = getIntent();
         String preferredGenres = intent.getStringExtra("preferred_genres");
-        if (preferredGenres == null) preferredGenres = "action";
+        if (preferredGenres != null) { // if starting from intent from PreferencesActivity
+            db.deleteAllRecommendations();
+        }
+        if (preferredGenres == null) { // if starting from bottom tab
+            //restore current recommendations from database
+            cardAdapter = new CardsDataAdapter(getApplicationContext(), 0, db.getAllRecommendations());
 
-        Log.d("genres", preferredGenres);
+            if (db.recommendationsIsEmpty()) showNoRecommendations();
+        }
 
         cardStack = (CardStack) findViewById(R.id.container);
         cardStack.setContentResource(R.layout.card_layout);
 
-        cardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
+        if (cardAdapter == null) {
+            cardAdapter = new CardsDataAdapter(getApplicationContext(), 0);
 
-        // call to search API
-        final ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        final Call<List<MangaByGenre>> call = apiInterface.search("mangareader.net", preferredGenres, API_KEY);
+            // call to search API
+            final ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            final Call<List<MangaByGenre>> call = apiInterface.search("mangareader.net", preferredGenres, API_KEY);
 
-        Log.d(TAG, call.request().url().toString());
+            Log.d(TAG, call.request().url().toString());
 
-        call.enqueue(new Callback<List<MangaByGenre>>() {
-            @Override
-            public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
-                List<MangaByGenre> mangasByGenres = response.body();
-                // get the manga with getMangaDetails API or from database
-                for (MangaByGenre m : mangasByGenres) {
-                    Log.d("MANGA: ", m.getName());
-                    // filter out mangas already liked or disliked
-                    if (!(db.hasLike(m.getMangaId()) || db.hasDisLike(m.getMangaId()))) {
+            call.enqueue(new Callback<List<MangaByGenre>>() {
+                @Override
+                public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
+                    List<MangaByGenre> mangasByGenres = response.body();
+                    int numRecs = 0;
 
-                        // if database already has manga, retrieve from it
-                        if (db.hasManga(m.getMangaId())) {
-                            Log.d(TAG, "db has manga: " + m.getMangaId());
-                            cardAdapter.add(db.getManga(m.getMangaId()));
-                        }
-                        else { // else make getMangaDetails API call
-                            Log.d(TAG, "db doesn't have manga: " + m.getMangaId());
+                    for (MangaByGenre m : mangasByGenres) {
+                        // filter out mangas already liked or disliked
+                        if (!(db.hasLike(m.getMangaId()) || db.hasDisLike(m.getMangaId()))) {
+                            numRecs++;
 
-                            Call<Manga> mangaCall = apiInterface.getMangaDetails("mangareader.net", m.getMangaId(), API_KEY);
+                            if (db.hasManga(m.getMangaId())) { // if db already has manga
+                                db.addRecommendation(m.getMangaId());
+                                cardAdapter.add(db.getManga(m.getMangaId()));
+                            }
+                            else { // else make getMangaDetails API call
+                                Call<Manga> mangaCall = apiInterface.getMangaDetails("mangareader.net", m.getMangaId(), API_KEY);
 
-                            mangaCall.enqueue(new Callback<Manga>() {
-                                @Override
-                                public void onResponse(Call<Manga> call, Response<Manga> response) {
-                                    Manga manga = response.body();
-                                    SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
-                                            formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
-                                            formatString(manga.getStatus()), formatInfoList(manga.getGenres()),
-                                            manga.getInfo(), manga.getCover());
+                                mangaCall.enqueue(new Callback<Manga>() {
+                                    @Override
+                                    public void onResponse(Call<Manga> call, Response<Manga> response) {
+                                        Manga manga = response.body();
+                                        SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
+                                                formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
+                                                formatString(manga.getStatus()), formatInfoList(manga.getGenres()),
+                                                manga.getInfo(), manga.getCover());
 
-                                    db.addManga(sqlMangaModel);
-                                    cardAdapter.add(sqlMangaModel);
-                                }
+                                        db.addManga(sqlMangaModel);
+                                        db.addRecommendation(manga.getHref());
+                                        cardAdapter.add(sqlMangaModel);
+                                    }
 
-                                @Override
-                                public void onFailure(Call<Manga> call, Throwable t) {
-                                    // Log error here since request failed
-                                    Log.e("Failed", t.toString());
-                                }
-                            });
+                                    @Override
+                                    public void onFailure(Call<Manga> call, Throwable t) {
+                                        // Log error here since request failed
+                                        Log.e("Failed", t.toString());
+                                    }
+                                });
+                            }
                         }
                     }
 
-                }
-                int statusCode = response.code();
-                Log.e("Tag", String.valueOf(statusCode));
-            }
+                    if (numRecs == 0) showNoRecommendations();
 
-            @Override
-            public void onFailure(Call<List<MangaByGenre>> call, Throwable t) {
-                // Log error here since request failed
-                Log.e("Failed", t.toString());
-            }
-        });
+                    int statusCode = response.code();
+                    Log.e("Tag", String.valueOf(statusCode));
+                }
+
+                @Override
+                public void onFailure(Call<List<MangaByGenre>> call, Throwable t) {
+                    // Log error here since request failed
+                    Log.e("Failed", t.toString());
+                }
+            });
+        }
 
         cardStack.setAdapter(cardAdapter);
         cardStack.setVisibleCardNum(2);
@@ -112,13 +126,6 @@ public class RecommendationActivity extends AppCompatActivity {
                 new CardStack.CardEventListener() {
                     @Override
                     public boolean swipeEnd(int section, float distance) {
-                        if (section == 1 || section == 3) {
-                            Log.d("LIKED", "this manga");
-                        }
-                        if (section == 0 || section == 2) {
-                            Log.d("DISLIKED", "this manga");
-                        }
-
                         return (distance > 300) ? true : false;
                     }
 
@@ -134,13 +141,17 @@ public class RecommendationActivity extends AppCompatActivity {
 
                     @Override
                     public void discarded(int mIndex, int direction) {
-                        Log.d("index", String.valueOf(mIndex));
+                        //mIndex starts at 1, cardAdapter starts indexing at 0
+                        String mangaId = cardAdapter.getItem(mIndex - 1).getHref();
+
                         if (direction == 1 || direction == 3) {
-                            db.addLike(cardAdapter.getItem(mIndex - 1).getHref());
+                            db.addLike(mangaId);
                         }
-                        if (direction == 0 || direction == 2) {
-                            db.addDislike(cardAdapter.getItem(mIndex - 1).getHref());
+                        else if (direction == 0 || direction == 2) {
+                            db.addDislike(mangaId);
                         }
+                        db.deleteRecommendation(mangaId);
+                        if (db.recommendationsIsEmpty()) showNoRecommendations();
                     }
 
                     @Override
@@ -180,6 +191,14 @@ public class RecommendationActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void showNoRecommendations() {
+        noMoreRecsTextView.setText("No mangas to show.");
+    }
+
+    private void hideNoRecommendations() {
+        noMoreRecsTextView.setText("");
     }
 
     private String formatString(String str) {

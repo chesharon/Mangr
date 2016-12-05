@@ -8,6 +8,10 @@
     tools:context="edu.calpoly.womangr.mangr.RecommendationActivity"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/no_more_recs_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -20,14 +20,12 @@ public class DislikesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dislikes);
 
-        Intent intent = getIntent();
-
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.manga_dislikes_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseHandler db = new DatabaseHandler(this);
 
-        recyclerView.setAdapter(new MangaListAdapter(db.getAllDislikes()));
+        recyclerView.setAdapter(new MangaListAdapter("dislikes", db.getAllDislikes()));
 
         // Bottom navigation bar
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);

@@ -89,6 +89,17 @@
                 android:gravity="right"
                 android:layout_marginLeft="20dp" />
 
+            <!-- Trash can -->
+            <ImageView
+                android:id="@+id/trash_can"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/delete"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/manga_title"
+                android:gravity="right"
+                android:layout_marginLeft="20dp" />
+
         </LinearLayout>
 
     </LinearLayout>

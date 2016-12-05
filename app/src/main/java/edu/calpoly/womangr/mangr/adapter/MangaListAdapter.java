@@ -1,10 +1,10 @@
 package edu.calpoly.womangr.mangr.adapter;
 
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -23,15 +23,18 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.calpoly.womangr.mangr.R;
+import edu.calpoly.womangr.mangr.sqlite.DatabaseHandler;
 import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
 public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.ViewHolder> {
 
+    private String listType; //likes or dislikes
     private List<SqlMangaModel> mangas;
     private Context context;
     private SparseBooleanArray expandState = new SparseBooleanArray();
 
-    public MangaListAdapter(List<SqlMangaModel> mangas) {
+    public MangaListAdapter(String listType, List<SqlMangaModel> mangas) {
+        this.listType = listType;
         this.mangas = mangas;
         for (int i = 0; i < mangas.size(); i++) {
             expandState.append(i, false);
@@ -67,24 +70,49 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
         holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
             @Override
             public void onPreOpen() {
-                createRotateAnimator(holder.arrow_down, 0f, 180f).start();
+                createRotateAnimator(holder.arrowDown, 0f, 180f).start();
                 expandState.put(position, true);
             }
 
             @Override
             public void onPreClose() {
-                createRotateAnimator(holder.arrow_down, 180f, 0f).start();
+                createRotateAnimator(holder.arrowDown, 180f, 0f).start();
                 expandState.put(position, false);
             }
         });
 
-        holder.arrow_down.setRotation(expandState.get(position) ? 180f : 0f);
+        holder.arrowDown.setRotation(expandState.get(position) ? 180f : 0f);
         holder.row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 onClickButton(holder.expandableLayout);
             }
         });
+
+        holder.trashCan.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(context)
+                                .setMessage("Delete this item?")
+                                .setPositiveButton("Delete",
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                DatabaseHandler db = new DatabaseHandler(context);
+                                                if (listType.equals("likes")) db.deleteLike(manga.getHref());
+                                                else if (listType.equals("dislikes")) db.deleteDislike(manga.getHref());
+
+                                                mangas.remove(position);
+                                                notifyDataSetChanged();
+                                            }
+                                        })
+                                .setNegativeButton("No", null)
+                                .create();
+                        alertDialog.show();
+                    }
+                }
+        );
     }
 
     private void onClickButton(final ExpandableLayout expandableLayout) {
@@ -103,7 +131,7 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
          */
         public LinearLayout row;
         public ExpandableLinearLayout expandableLayout;
-        public ImageView cover, arrow_down;
+        public ImageView cover, arrowDown, trashCan;
         public TextView title, authors, artists, genres, status, summary;
 
         public ViewHolder(View v) {
@@ -115,7 +143,8 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
             genres = (TextView) v.findViewById(R.id.expand_genres);
             status = (TextView) v.findViewById(R.id.expand_status);
             summary = (TextView) v.findViewById(R.id.expand_summary);
-            arrow_down = (ImageView) v.findViewById(R.id.arrow_down);
+            arrowDown = (ImageView) v.findViewById(R.id.arrow_down);
+            trashCan = (ImageView) v.findViewById(R.id.trash_can);
             row = (LinearLayout) v.findViewById(R.id.row);
             expandableLayout = (ExpandableLinearLayout) v.findViewById(R.id.expandableLayout);
         }

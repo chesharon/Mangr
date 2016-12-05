@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import edu.calpoly.womangr.mangr.R;
 import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
@@ -21,6 +23,10 @@ public class CardsDataAdapter extends ArrayAdapter<SqlMangaModel> {
 
     public CardsDataAdapter(Context context, int resource) {
         super(context, resource);
+    }
+
+    public CardsDataAdapter(Context context, int resource, List<SqlMangaModel> mangas) {
+        super(context, resource, mangas);
     }
 
     @NonNull
