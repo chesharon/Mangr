@@ -47,7 +47,8 @@ public class RecommendationActivity extends AppCompatActivity {
         }
         if (preferredGenres == null) { // if starting from bottom tab
             //restore current recommendations from database
-            cardAdapter = new CardsDataAdapter(getApplicationContext(), 0, db.getAllRecommendations());
+            cardAdapter = new CardsDataAdapter(
+                    getApplicationContext(), 0, db.getAllRecommendationIds());
 
             if (db.recommendationsIsEmpty()) showNoRecommendations();
         }
@@ -77,7 +78,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
                             if (db.hasManga(m.getMangaId())) { // if db already has manga
                                 db.addRecommendation(m.getMangaId());
-                                cardAdapter.add(db.getManga(m.getMangaId()));
+                                cardAdapter.add(m.getMangaId());
                             }
                             else { // else make getMangaDetails API call
                                 Call<Manga> mangaCall = apiInterface.getMangaDetails("mangareader.net", m.getMangaId(), API_KEY);
@@ -93,7 +94,7 @@ public class RecommendationActivity extends AppCompatActivity {
 
                                         db.addManga(sqlMangaModel);
                                         db.addRecommendation(manga.getHref());
-                                        cardAdapter.add(sqlMangaModel);
+                                        cardAdapter.add(manga.getHref());
                                     }
 
                                     @Override
@@ -142,7 +143,7 @@ public class RecommendationActivity extends AppCompatActivity {
                     @Override
                     public void discarded(int mIndex, int direction) {
                         //mIndex starts at 1, cardAdapter starts indexing at 0
-                        String mangaId = cardAdapter.getItem(mIndex - 1).getHref();
+                        String mangaId = cardAdapter.getItem(mIndex - 1);
 
                         if (direction == 1 || direction == 3) {
                             db.addLike(mangaId);

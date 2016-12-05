@@ -246,8 +246,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return dislikes;
     }
 
-    public List<SqlMangaModel> getAllRecommendations() {
-        ArrayList<SqlMangaModel> recs = new ArrayList<>();
+    public List<String> getAllRecommendationIds() {
+        ArrayList<String> recs = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TABLE_RECS;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -255,7 +255,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                recs.add(getManga(cursor.getString(0)));
+                recs.add(cursor.getString(0));
             } while (cursor.moveToNext());
         }
 
