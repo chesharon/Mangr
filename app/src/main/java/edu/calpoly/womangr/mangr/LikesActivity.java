@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemDecoration;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -20,6 +21,7 @@ public class LikesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_likes);
+        getSupportActionBar().setTitle("Likes");
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.manga_likes_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

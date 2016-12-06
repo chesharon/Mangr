@@ -36,6 +36,7 @@ public class PreferenceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
+        getSupportActionBar().setTitle("Preferences");
 
         // genres grid
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.genres_grid);
@@ -113,6 +114,12 @@ public class PreferenceActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    public void formatString(List<Genre> genres) {
+        for (Genre g : genres) {
+            g.setGenre(g.getGenre().substring(0, 1).toUpperCase() + g.getGenre().substring(1));
+        }
     }
 
     public String formatGenreString() {

@@ -1,11 +1,19 @@
 package edu.calpoly.womangr.mangr;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
@@ -31,11 +39,15 @@ public class RecommendationActivity extends AppCompatActivity {
     private CardStack cardStack;
     private CardsDataAdapter cardAdapter;
     private DatabaseHandler db = new DatabaseHandler(this);
+    private ImageView heart, heartbreak;
+    private static final DecelerateInterpolator DECCELERATE_INTERPOLATOR = new DecelerateInterpolator();
+    private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommendation);
+        getSupportActionBar().hide();
 
         noMoreRecsTextView = (TextView) findViewById(R.id.no_more_recs_textview);
         hideNoRecommendations();
@@ -52,6 +64,9 @@ public class RecommendationActivity extends AppCompatActivity {
 
             if (db.recommendationsIsEmpty()) showNoRecommendations();
         }
+
+        heart = (ImageView) findViewById(R.id.heart);
+        heartbreak = (ImageView) findViewById(R.id.heartbreak);
 
         cardStack = (CardStack) findViewById(R.id.container);
         cardStack.setContentResource(R.layout.card_layout);
@@ -147,9 +162,11 @@ public class RecommendationActivity extends AppCompatActivity {
 
                         if (direction == 1 || direction == 3) {
                             db.addLike(mangaId);
+                            flashIcon(heart);
                         }
                         else if (direction == 0 || direction == 2) {
                             db.addDislike(mangaId);
+                            flashIcon(heartbreak);
                         }
                         db.deleteRecommendation(mangaId);
                         if (db.recommendationsIsEmpty()) showNoRecommendations();
@@ -215,5 +232,38 @@ public class RecommendationActivity extends AppCompatActivity {
             rt = rt.substring(0, rt.length() - 2);
         }
         return rt;
+    }
+
+    private void flashIcon(final ImageView icon) {
+        icon.setVisibility(View.VISIBLE);
+
+        icon.setScaleY(0.1f);
+        icon.setScaleX(0.1f);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+
+        ObjectAnimator imgScaleUpYAnim = ObjectAnimator.ofFloat(icon, "scaleY", 0.1f, 1f);
+        imgScaleUpYAnim.setDuration(200);
+        imgScaleUpYAnim.setInterpolator(DECCELERATE_INTERPOLATOR);
+        ObjectAnimator imgScaleUpXAnim = ObjectAnimator.ofFloat(icon, "scaleX", 0.1f, 1f);
+        imgScaleUpXAnim.setDuration(200);
+        imgScaleUpXAnim.setInterpolator(DECCELERATE_INTERPOLATOR);
+
+        ObjectAnimator imgScaleDownYAnim = ObjectAnimator.ofFloat(icon, "scaleY", 1f, 0f);
+        imgScaleDownYAnim.setDuration(200);
+        imgScaleDownYAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+        ObjectAnimator imgScaleDownXAnim = ObjectAnimator.ofFloat(icon, "scaleX", 1f, 0f);
+        imgScaleDownXAnim.setDuration(200);
+        imgScaleDownXAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+        animatorSet.play(imgScaleDownYAnim).with(imgScaleDownXAnim).after(imgScaleUpYAnim);
+
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                icon.setVisibility(View.GONE);
+            }
+        });
+        animatorSet.start();
     }
 }

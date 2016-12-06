@@ -26,6 +26,7 @@
             android:id="@+id/bottom_bar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:paddingTop="5dp"
             android:gravity="bottom"
             app:bb_tabXmlResource="@xml/bottombar_tabs"/>
     </LinearLayout>

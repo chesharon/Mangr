@@ -1,5 +1,9 @@
 package edu.calpoly.womangr.mangr.sqlite;
 
+import android.content.Context;
+
+import java.util.List;
+
 public class SqlMangaModel {
     private String name;
     private String href;

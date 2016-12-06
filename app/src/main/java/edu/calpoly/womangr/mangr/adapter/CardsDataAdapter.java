@@ -1,6 +1,7 @@
 package edu.calpoly.womangr.mangr.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.View;
@@ -39,6 +40,8 @@ public class CardsDataAdapter extends ArrayAdapter<String> {
         SqlMangaModel manga = db.getManga(getItem(position));
 
         //Set Title
+        //Typeface boldFont = Typeface.createFromAsset(convertView.getContext().getAssets(), "Quicksand-Regular.ttf");
+        //Typeface font = Typeface.createFromAsset(convertView.getContext().getAssets(), "Quicksand-Regular.ttf");
         title = (TextView)(convertView.findViewById(R.id.title));
         title.setText(manga.getName());
 
@@ -50,6 +53,7 @@ public class CardsDataAdapter extends ArrayAdapter<String> {
 
         //Set Genre(s)
         genres = (TextView) (convertView.findViewById(R.id.genres));
+        //genres.setTypeface(font);
         genres.setText(Html.fromHtml("<b>" + "Genre(s): " + "</b>" + manga.getGenres()));
 
         //Set Author(s)
@@ -67,7 +71,12 @@ public class CardsDataAdapter extends ArrayAdapter<String> {
 
         //Set Summary
         summary = (TextView) (convertView.findViewById(R.id.summary));
-        summary.setText(Html.fromHtml("<b>" + "Summary: " + "</b>" + manga.getInfo()));
+        //summary.setTypeface(font);
+        if (manga.getInfo() == null) {
+            summary.setText(Html.fromHtml("<b>" + "Summary: " + "</b> No summary available."));
+        } else {
+            summary.setText(Html.fromHtml("<b>" + "Summary: " + "</b>" + manga.getInfo()));
+        }
 
         return convertView;
     }

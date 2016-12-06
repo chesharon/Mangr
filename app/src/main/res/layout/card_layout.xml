@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/card"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:padding="5dp" >
+    android:padding="10dp">
+    <!--android:background="@drawable/layout_border"
+    card_view:cardCornerRadius="6dp"
+    card_view:cardElevation="10dp"-->
 
     <TextView
         android:id="@+id/title"
@@ -14,7 +18,7 @@
         android:layout_marginBottom="5dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="#040404"
+        android:textColor="@color/colorPrimaryDark"
         android:gravity="center"/>
 
     <LinearLayout
@@ -28,13 +32,13 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
+            android:layout_weight="0.3"
             android:layout_marginRight="10dp">
 
             <ImageView
                 android:id="@+id/manga_cover"
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:layout_width="200dp"
                 android:layout_gravity="center"/>
 
         </LinearLayout>
@@ -43,7 +47,7 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6">
+            android:layout_weight="0.5">
 
             <LinearLayout
                 android:id="@+id/genres_layout"
@@ -55,7 +59,8 @@
                     android:id="@+id/genres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp">
+                    android:textSize="15sp"
+                    android:textColor="#040404">
 
                 </TextView>
 
@@ -71,7 +76,8 @@
                     android:id="@+id/authors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp">
+                    android:textSize="15sp"
+                    android:textColor="#040404">
 
                 </TextView>
 
@@ -87,7 +93,8 @@
                     android:id="@+id/artists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp">
+                    android:textSize="15sp"
+                    android:textColor="#040404">
 
                 </TextView>
 
@@ -103,7 +110,8 @@
                     android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp">
+                    android:textSize="15sp"
+                    android:textColor="#040404">
 
                 </TextView>
 
@@ -122,15 +130,16 @@
 
         <ScrollView
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content">
+            android:layout_width="wrap_content">-->
 
-        <TextView
-            android:id="@+id/summary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp">
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#040404">
 
-        </TextView>
+            </TextView>
 
         </ScrollView>
 

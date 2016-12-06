@@ -19,6 +19,7 @@ public class DislikesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dislikes);
+        getSupportActionBar().setTitle("Dislikes");
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.manga_dislikes_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -54,14 +55,14 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
         holder.setIsRecyclable(false);
 
         holder.title.setText(manga.getName());
-        holder.authors.setText("Author(s): " + manga.getAuthor());
-        holder.artists.setText("Artist(s): " + manga.getArtist());
+        holder.authors.setText(manga.getAuthor());
+        holder.artists.setText(manga.getArtist());
         Picasso.with(context)
                 .load(manga.getCover())
                 .into(holder.cover);
-        holder.genres.setText("Genre(s): " + manga.getGenres());
-        holder.status.setText("Status: " + manga.getStatus());
-        holder.summary.setText("Summary: " + manga.getInfo());
+        holder.genres.setText(Html.fromHtml("<b>Genre(s): </b>" + manga.getGenres()));
+        holder.status.setText(Html.fromHtml("<b>Status: </b>" + manga.getStatus()));
+        holder.summary.setText(Html.fromHtml("<b>Summary: </b>" + manga.getInfo()));
 
         holder.expandableLayout.setInRecyclerView(true);
         holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_INTERPOLATOR));

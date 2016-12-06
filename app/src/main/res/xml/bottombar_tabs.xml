@@ -3,17 +3,17 @@
     <tab
         id="@+id/tab_likes"
         icon="@drawable/thumb_up"
-        title="@string/likes" />
+        title="Likes" />
     <tab
         id="@+id/tab_dislikes"
         icon="@drawable/thumb_down"
-        title="@string/dislikes" />
+        title="Dislikes" />
     <tab
         id="@+id/tab_recs"
         icon="@drawable/cursor_pointer"
-        title="@string/recs" />
+        title="Recommendations" />
     <tab
         id="@+id/tab_prefs"
         icon="@drawable/settings"
-        title="@string/preferences" />
+        title="Preferences" />
 </tabs>
