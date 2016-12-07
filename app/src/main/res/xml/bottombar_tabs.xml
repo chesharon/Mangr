@@ -2,18 +2,14 @@
 <tabs>
     <tab
         id="@+id/tab_likes"
-        icon="@drawable/thumb_up"
-        title="Likes" />
+        icon="@drawable/thumbs_up" />
     <tab
         id="@+id/tab_dislikes"
-        icon="@drawable/thumb_down"
-        title="Dislikes" />
+        icon="@drawable/thumbs_down" />
     <tab
         id="@+id/tab_recs"
-        icon="@drawable/cursor_pointer"
-        title="Recommendations" />
+        icon="@drawable/cursor" />
     <tab
         id="@+id/tab_prefs"
-        icon="@drawable/settings"
-        title="Preferences" />
+        icon="@drawable/settings" />
 </tabs>

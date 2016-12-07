@@ -1,4 +1,4 @@
-package edu.calpoly.womangr.mangr;
+package edu.calpoly.womangr.mangr.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import edu.calpoly.womangr.mangr.R;
 import edu.calpoly.womangr.mangr.model.Genre;
 
 public class GenresAdapter extends RecyclerView.Adapter<GenreViewHolder> {

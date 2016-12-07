@@ -27,19 +27,28 @@ import edu.calpoly.womangr.mangr.R;
 import edu.calpoly.womangr.mangr.sqlite.DatabaseHandler;
 import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
+import static edu.calpoly.womangr.mangr.DislikesActivity.dislikes_twoPane;
+import static edu.calpoly.womangr.mangr.LikesActivity.likes_twoPane;
+
 public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.ViewHolder> {
 
     private String listType; //likes or dislikes
     private List<SqlMangaModel> mangas;
     private Context context;
     private SparseBooleanArray expandState = new SparseBooleanArray();
+    private OnItemClickListener listener;
 
-    public MangaListAdapter(String listType, List<SqlMangaModel> mangas) {
+    public MangaListAdapter(String listType, List<SqlMangaModel> mangas, OnItemClickListener listener) {
         this.listType = listType;
         this.mangas = mangas;
+        this.listener = listener;
         for (int i = 0; i < mangas.size(); i++) {
             expandState.append(i, false);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(SqlMangaModel sqlManga);
     }
 
     @Override
@@ -54,6 +63,11 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
         final SqlMangaModel manga = mangas.get(position);
         holder.setIsRecyclable(false);
 
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                listener.onItemClick(manga);
+            }
+        });
         holder.title.setText(manga.getName());
         holder.authors.setText(manga.getAuthor());
         holder.artists.setText(manga.getArtist());
@@ -64,32 +78,35 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
         holder.status.setText(Html.fromHtml("<b>Status: </b>" + manga.getStatus()));
         holder.summary.setText(Html.fromHtml("<b>Summary: </b>" + manga.getInfo()));
 
-        holder.expandableLayout.setInRecyclerView(true);
-        holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_INTERPOLATOR));
-        holder.expandableLayout.setExpanded(expandState.get(position));
-        Log.d("expanded", String.valueOf(expandState.get(position)));
-        holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
-            @Override
-            public void onPreOpen() {
-                createRotateAnimator(holder.arrowDown, 0f, 180f).start();
-                expandState.put(position, true);
-            }
+        if (likes_twoPane == false && dislikes_twoPane == false) {
+            holder.expandableLayout.setInRecyclerView(true);
+            holder.expandableLayout.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_INTERPOLATOR));
+            holder.expandableLayout.setExpanded(expandState.get(position));
+            holder.expandableLayout.setListener(new ExpandableLayoutListenerAdapter() {
+                @Override
+                public void onPreOpen() {
+                    createRotateAnimator(holder.arrowDown, 0f, 180f).start();
+                    expandState.put(position, true);
+                }
 
-            @Override
-            public void onPreClose() {
-                createRotateAnimator(holder.arrowDown, 180f, 0f).start();
-                expandState.put(position, false);
-            }
-        });
+                @Override
+                public void onPreClose() {
+                    createRotateAnimator(holder.arrowDown, 180f, 0f).start();
+                    expandState.put(position, false);
+                }
+            });
 
-        holder.arrowDown.setRotation(expandState.get(position) ? 180f : 0f);
-        holder.row.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                onClickButton(holder.expandableLayout);
-            }
-        });
-
+            holder.arrowDown.setRotation(expandState.get(position) ? 180f : 0f);
+            holder.row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    onClickButton(holder.expandableLayout);
+                }
+            });
+        }
+        else {
+            holder.arrowDown.setVisibility(View.INVISIBLE);
+        }
         holder.trashCan.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -130,6 +147,7 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
          * You must use the ExpandableLinearLayout in the recycler view.
          * The ExpandableRelativeLayout doesn't work.
          */
+        public View view;
         public LinearLayout row;
         public ExpandableLinearLayout expandableLayout;
         public ImageView cover, arrowDown, trashCan;
@@ -137,12 +155,13 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
 
         public ViewHolder(View v) {
             super(v);
+            view = v;
             cover = (ImageView) v.findViewById(R.id.manga_cover);
             title = (TextView) v.findViewById(R.id.manga_title);
             authors = (TextView) v.findViewById(R.id.manga_authors);
             artists = (TextView) v.findViewById(R.id.manga_artists);
             genres = (TextView) v.findViewById(R.id.expand_genres);
-            status = (TextView) v.findViewById(R.id.expand_status);
+            status = (TextView) v.findViewById(R.id.fragment_status);
             summary = (TextView) v.findViewById(R.id.expand_summary);
             arrowDown = (ImageView) v.findViewById(R.id.arrow_down);
             trashCan = (ImageView) v.findViewById(R.id.trash_can);

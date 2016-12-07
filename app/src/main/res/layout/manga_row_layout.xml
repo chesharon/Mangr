@@ -139,14 +139,14 @@
 
         <LinearLayout
             android:layout_below="@+id/expand_genres_layout"
-            android:id="@+id/expand_status_layout"
+            android:id="@+id/fragment_status_layout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/expand_status"
+                android:id="@+id/fragment_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -157,8 +157,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_below="@+id/expand_status_layout"
-            android:id="@+id/expand_summary_layout"
+            android:layout_below="@+id/fragment_status_layout"
+            android:id="@+id/fragment_summary_layout"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -176,4 +176,5 @@
         </LinearLayout>
 
     </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
 </LinearLayout>

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import edu.calpoly.womangr.mangr.adapter.GenresAdapter;
 import edu.calpoly.womangr.mangr.model.Genre;
 import edu.calpoly.womangr.mangr.rest.ApiClient;
 import edu.calpoly.womangr.mangr.rest.ApiInterface;

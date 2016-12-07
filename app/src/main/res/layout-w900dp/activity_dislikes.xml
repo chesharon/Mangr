@@ -5,11 +5,12 @@
     android:id="@+id/activity_dislikes"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     tools:context="edu.calpoly.womangr.mangr.DislikesActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:gravity="end|bottom"
         android:orientation="vertical">
@@ -30,5 +31,11 @@
             android:gravity="bottom"
             app:bb_tabXmlResource="@xml/bottombar_tabs"/>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/dislikes_fragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_likes"
         android:enabled="true"
-        android:icon="@drawable/thumb_up"
+        android:icon="@drawable/thumbs_up"
         android:title="Likes"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_dislikes"
         android:enabled="true"
-        android:icon="@drawable/thumb_down"
+        android:icon="@drawable/thumbs_down"
         android:title="Dislikes"
         app:showAsAction="ifRoom" />
     <item

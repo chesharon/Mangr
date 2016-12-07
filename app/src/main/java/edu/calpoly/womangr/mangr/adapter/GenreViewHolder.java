@@ -1,12 +1,13 @@
-package edu.calpoly.womangr.mangr;
+package edu.calpoly.womangr.mangr.adapter;
 
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import edu.calpoly.womangr.mangr.PreferenceActivity;
+import edu.calpoly.womangr.mangr.R;
 import edu.calpoly.womangr.mangr.model.Genre;
 
 public class GenreViewHolder extends RecyclerView.ViewHolder {
