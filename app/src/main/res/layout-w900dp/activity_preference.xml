@@ -11,8 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="@integer/preferences_genres_layout_weight"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_weight="5"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_vertical_margin"
@@ -21,13 +21,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/genre_s"
+            android:text="Genre(s):"
+            android:textSize="30sp"
             android:textColor="@color/dark"/>
-        
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/genres_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             app:layoutManager="GridLayoutManager"
             app:spanCount="2">
         </android.support.v7.widget.RecyclerView>
@@ -37,7 +39,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="@integer/preferences_bottom_layout_weight"
+        android:layout_weight="1.5"
         android:gravity="end|bottom"
         android:orientation="vertical">
 
@@ -47,7 +49,7 @@
             android:textAllCaps="false"
             android:text="@string/mango"
             android:id="@+id/button"
-            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="10dp"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:textColor="@color/white"
             android:background="@color/colorPrimaryDark"/>

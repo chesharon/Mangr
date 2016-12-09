@@ -53,14 +53,16 @@
                 android:id="@+id/genres_layout"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_weight="0.6"
+                android:layout_height="0dp">
 
                 <TextView
                     android:id="@+id/genres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:textSize="15sp"
-                    android:textColor="#040404">
+                    android:textColor="@color/dark">
 
                 </TextView>
 
@@ -76,8 +78,9 @@
                     android:id="@+id/authors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:textSize="15sp"
-                    android:textColor="#040404">
+                    android:textColor="@color/dark">
 
                 </TextView>
 
@@ -93,8 +96,9 @@
                     android:id="@+id/artists"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:textSize="15sp"
-                    android:textColor="#040404">
+                    android:textColor="@color/dark">
 
                 </TextView>
 
@@ -110,8 +114,9 @@
                     android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:textSize="15sp"
-                    android:textColor="#040404">
+                    android:textColor="@color/dark">
 
                 </TextView>
 
@@ -137,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textColor="#040404">
+                android:textColor="@color/dark">
 
             </TextView>
 

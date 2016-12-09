@@ -19,7 +19,7 @@ import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
 public class DislikesActivity extends AppCompatActivity {
 
-    static MangaListAdapter a;
+    private MangaListAdapter mangaListAdapter;
     public static boolean dislikes_twoPane = false;
 
     @Override
@@ -41,14 +41,23 @@ public class DislikesActivity extends AppCompatActivity {
             dislikes_twoPane = false;
         }
 
-        a = new MangaListAdapter("dislikes", db.getAllDislikes(), new MangaListAdapter.OnItemClickListener() {
+        mangaListAdapter = new MangaListAdapter("dislikes", db.getAllDislikes(), new MangaListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(SqlMangaModel sqlManga) {
-                updateFragment(sqlManga);
+            public void onItemClick(SqlMangaModel sqlManga, int position) {
+                if (dislikes_twoPane == true) {
+                    updateFragment(sqlManga);
+                }
+                else {
+                    Intent intent = new Intent(DislikesActivity.this, MangaDetails.class);
+                    intent.putExtra("mangaId", sqlManga.getHref());
+                    intent.putExtra("listType", "dislikes");
+                    intent.putExtra("index", position);
+                    startActivity(intent);
+                }
             }
         });
 
-        recyclerView.setAdapter(a);
+        recyclerView.setAdapter(mangaListAdapter);
 
         // Bottom navigation bar
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
@@ -81,11 +90,17 @@ public class DislikesActivity extends AppCompatActivity {
                 }
         );
 
-        a.notifyDataSetChanged();
+        mangaListAdapter.notifyDataSetChanged();
     }
 
-    public static void notifyDataChanged() {
-        a.notifyDataSetChanged();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int index = getIntent().getIntExtra("deletedIndex", -1);
+        if (index != -1) {
+            mangaListAdapter.notifyItemRemoved(index);
+        }
     }
 
     public void updateFragment(SqlMangaModel sqlManga) {

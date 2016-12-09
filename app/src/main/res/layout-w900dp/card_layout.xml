@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
     android:background="@color/white"
     android:padding="20dp">
 
@@ -10,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:textSize="24sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimaryDark"
         android:gravity="center"/>
@@ -26,8 +28,9 @@
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
-            android:layout_marginRight="10dp">
+            android:layout_weight="0.1"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp">
 
             <ImageView
                 android:id="@+id/manga_cover"
@@ -55,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/tablet_text_size"
                     android:textColor="#040404">
 
                 </TextView>
@@ -74,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/tablet_text_size"
                     android:textColor="#040404">
 
                 </TextView>
@@ -93,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/tablet_text_size"
                     android:textColor="#040404">
 
                 </TextView>
@@ -112,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/tablet_text_size"
                     android:textColor="#040404">
 
                 </TextView>
@@ -133,14 +136,17 @@
 
         <ScrollView
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content">-->
+            android:layout_width="wrap_content">
 
             <TextView
                 android:id="@+id/summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:textColor="#040404">
+                android:textSize="@dimen/tablet_text_size"
+                android:textColor="#040404"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
             </TextView>
 

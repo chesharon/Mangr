@@ -35,6 +35,6 @@ public interface ApiInterface {
     Call<Chapter> getChapter(@Path("siteid") String siteID, @Path("mangaid") String mangaID, @Path("chapterid") int chapterID, @Query("mashape-key") String apiKey);
 
     //SEARCH
-    @GET("{siteid}/search?cover=1&info=1")
+    @GET("{siteid}/search?cover=1&info=1&l=200")
     Call<List<MangaByGenre>> search(@Path("siteid") String siteID, @Query("g") String genreIDS, @Query("mashape-key") String apiKey);
 }

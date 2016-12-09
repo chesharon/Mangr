@@ -12,15 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-
 import edu.calpoly.womangr.mangr.adapter.MangaListAdapter;
 import edu.calpoly.womangr.mangr.sqlite.DatabaseHandler;
 import edu.calpoly.womangr.mangr.sqlite.SqlMangaModel;
 
 public class LikesActivity extends AppCompatActivity {
 
-    MangaListAdapter a;
+    private MangaListAdapter mangaListAdapter;
     public static boolean likes_twoPane = false;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class LikesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_likes);
         getSupportActionBar().setTitle("Likes");
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.manga_likes_recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.manga_likes_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         DatabaseHandler db = new DatabaseHandler(this);
@@ -41,14 +41,23 @@ public class LikesActivity extends AppCompatActivity {
             likes_twoPane = false;
         }
 
-        a = new MangaListAdapter("likes", db.getAllLikes(), new MangaListAdapter.OnItemClickListener() {
+        mangaListAdapter = new MangaListAdapter("likes", db.getAllLikes(), new MangaListAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(SqlMangaModel sqlManga) {
-                updateFragment(sqlManga);
+            public void onItemClick(SqlMangaModel sqlManga, int position) {
+                if (likes_twoPane == true) {
+                    updateFragment(sqlManga);
+                }
+                else {
+                    Intent intent = new Intent(LikesActivity.this, MangaDetails.class);
+                    intent.putExtra("mangaId", sqlManga.getHref());
+                    intent.putExtra("listType", "likes");
+                    intent.putExtra("index", position);
+                    startActivity(intent);
+                }
             }
         });
 
-        recyclerView.setAdapter(a);
+        recyclerView.setAdapter(mangaListAdapter);
 
         // Bottom navigation bar
         final BottomBar bottomBar = (BottomBar) findViewById(R.id.bottom_bar);
@@ -81,7 +90,17 @@ public class LikesActivity extends AppCompatActivity {
                 }
         );
 
-        a.notifyDataSetChanged();
+        mangaListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        int index = getIntent().getIntExtra("deletedIndex", -1);
+        if (index != -1) {
+            mangaListAdapter.notifyItemRemoved(index);
+        }
     }
 
     public void updateFragment(SqlMangaModel sqlManga) {

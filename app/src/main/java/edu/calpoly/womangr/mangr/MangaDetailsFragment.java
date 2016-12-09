@@ -25,7 +25,7 @@ public class MangaDetailsFragment extends Fragment {
         View linearLayout = null;
 
         if (manga != null) {
-            linearLayout = inflater.inflate(R.layout.card_layout, container, false);
+            linearLayout = inflater.inflate(R.layout.card_layout_fragment, container, false);
 
             title = (TextView) linearLayout.findViewById(R.id.title);
             title.setText(manga.getName());
