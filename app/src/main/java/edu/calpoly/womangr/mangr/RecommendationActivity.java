@@ -131,7 +131,9 @@ public class RecommendationActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(Call<List<MangaByGenre>> call, Throwable t) {
                     // Log error here since request failed
+                    // API returns {} if no results. GSON parser throws because expects JSONArray
                     Log.e("Failed", t.toString());
+                    showNoRecommendations();
                 }
             });
         }
@@ -231,6 +233,7 @@ public class RecommendationActivity extends AppCompatActivity {
             }
             rt = rt.substring(0, rt.length() - 2);
         }
+        rt = rt.replace('-', ' ');
         return rt;
     }
 

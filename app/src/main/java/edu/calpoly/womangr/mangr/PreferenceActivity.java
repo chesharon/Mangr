@@ -13,7 +13,6 @@ import android.widget.Button;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -21,6 +20,7 @@ import edu.calpoly.womangr.mangr.adapter.GenresAdapter;
 import edu.calpoly.womangr.mangr.model.Genre;
 import edu.calpoly.womangr.mangr.rest.ApiClient;
 import edu.calpoly.womangr.mangr.rest.ApiInterface;
+import edu.calpoly.womangr.mangr.sqlite.DatabaseHandler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,9 +29,10 @@ public class PreferenceActivity extends AppCompatActivity {
     private static final String TAG = PreferenceActivity.class.getSimpleName();
     private static final String API_KEY = "ahE5pYl9OfmshytVyaNSJkDIIQCip1dRTSwjsnqMM0cHvvBPUF";
 
-    private List<Genre> genres = new ArrayList<>();
+    private List<String> genres;
     public HashSet<String> selectedGenres = new HashSet<>();
     public GenresAdapter genresAdapter;
+    private DatabaseHandler db = new DatabaseHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,29 +46,35 @@ public class PreferenceActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(
                 PreferenceActivity.this,
                 getResources().getInteger(R.integer.genres_num_columns)));
+        genres = db.getAllGenres();
         genresAdapter = new GenresAdapter(genres);
         recyclerView.setAdapter(genresAdapter);
 
-        // call to getGenreList API
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Genre>> call = apiInterface.getGenreList("mangareader.net", API_KEY);
-        Log.d(TAG, call.request().url().toString());
-        call.enqueue(new Callback<List<Genre>>() {
-            @Override
-            public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
-                genres.addAll(response.body());
-                assert genres != null;
-                genresAdapter.notifyDataSetChanged();
-                int statusCode = response.code();
-                Log.e(TAG, String.valueOf(statusCode));
-            }
+        if (genres.size() == 0) {
+            // call to getGenreList API
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<List<Genre>> call = apiInterface.getGenreList("mangareader.net", API_KEY);
+            Log.d(TAG, call.request().url().toString());
+            call.enqueue(new Callback<List<Genre>>() {
+                @Override
+                public void onResponse(Call<List<Genre>> call, Response<List<Genre>> response) {
+                    for (Genre g : response.body()) {
+                        genres.add(g.getGenre());
+                        db.addGenre(g.getGenre());
+                    }
+                    assert genres != null;
+                    genresAdapter.notifyDataSetChanged();
+                    int statusCode = response.code();
+                    Log.e(TAG, String.valueOf(statusCode));
+                }
 
-            @Override
-            public void onFailure(Call<List<Genre>> call, Throwable t) {
-                // Log error here since request failed
-                Log.e("Failed", t.toString());
-            }
-        });
+                @Override
+                public void onFailure(Call<List<Genre>> call, Throwable t) {
+                    // Log error here since request failed
+                    Log.e("Failed", t.toString());
+                }
+            });
+        }
 
         // manGO! button
         final Button button = (Button) findViewById(R.id.button);
@@ -115,12 +122,6 @@ public class PreferenceActivity extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-    public void formatString(List<Genre> genres) {
-        for (Genre g : genres) {
-            g.setGenre(g.getGenre().substring(0, 1).toUpperCase() + g.getGenre().substring(1));
-        }
     }
 
     public String formatGenreString() {

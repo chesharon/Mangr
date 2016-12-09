@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import edu.calpoly.womangr.mangr.R;
-import edu.calpoly.womangr.mangr.model.Genre;
 
 public class GenresAdapter extends RecyclerView.Adapter<GenreViewHolder> {
-    private List<Genre> genres;
+    private List<String> genreIds;
 
-    public GenresAdapter(List<Genre> genres) {
-        this.genres = genres;
+    public GenresAdapter(List<String> genreIds) {
+        this.genreIds = genreIds;
     }
 
     @Override
@@ -28,11 +27,11 @@ public class GenresAdapter extends RecyclerView.Adapter<GenreViewHolder> {
 
     @Override
     public void onBindViewHolder(GenreViewHolder holder, int position) {
-        holder.bind(genres.get(position));
+        holder.bind(genreIds.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return genres.size();
+        return genreIds.size();
     }
 }

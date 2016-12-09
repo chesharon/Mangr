@@ -8,19 +8,15 @@ import android.widget.TextView;
 
 import edu.calpoly.womangr.mangr.PreferenceActivity;
 import edu.calpoly.womangr.mangr.R;
-import edu.calpoly.womangr.mangr.model.Genre;
 
 public class GenreViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = GenreViewHolder.class.getSimpleName();
 
     private TextView textView;
     private CheckBox checkBox;
     private String genreStr;
-    private View genreView;
 
     public GenreViewHolder(final View genreView) {
         super(genreView);
-        this.genreView = genreView;
         textView = (TextView) genreView.findViewById(R.id.genre_item_text);
         checkBox = (CheckBox) genreView.findViewById(R.id.genre_item_checkbox);
         checkBox.setOnCheckedChangeListener(
@@ -39,8 +35,8 @@ public class GenreViewHolder extends RecyclerView.ViewHolder {
         );
     }
 
-    public void bind(final Genre genre) {
-        this.genreStr = genre.getGenre();
+    public void bind(final String genreStr) {
+        this.genreStr = genreStr;
         /*Typeface font = Typeface.createFromAsset(genreView.getContext().getAssets(), "Quicksand-Regular.ttf");
         textView.setTypeface(font);
         textView.setTypeface(textView.getTypeface(), Typeface.BOLD);*/

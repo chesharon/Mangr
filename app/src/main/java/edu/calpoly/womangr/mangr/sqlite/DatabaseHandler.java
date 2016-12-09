@@ -28,6 +28,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_LAST_UPDATE = "lastUpdate";
     private static final String KEY_CHAPTERS = "chapters";
 
+    // Recommendations table
+    private static final String TABLE_GENRES = "genres";
+    private static final String KEY_GENRE_ID = "genreId";
+
     // Likes table
     private static final String TABLE_LIKES = "likes";
     private static final String KEY_MANGA_ID = "mangaId";
@@ -53,6 +57,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_YEAR + " TEXT," + KEY_GENRES + " TEXT,"
                 + KEY_INFO + " TEXT," + KEY_COVER + " TEXT,"
                 + KEY_LAST_UPDATE + " TEXT," + KEY_CHAPTERS + " TEXT)";
+        String CREATE_GENRES_TABLE = "CREATE TABLE " + TABLE_GENRES + "("
+                + KEY_GENRE_ID + " TEXT PRIMARY KEY)";
         String CREATE_LIKES_TABLE = "CREATE TABLE " + TABLE_LIKES + "("
                 + KEY_MANGA_ID + " TEXT PRIMARY KEY)";
         String CREATE_DISLIKES_TABLE = "CREATE TABLE " + TABLE_DISLIKES + "("
@@ -61,6 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_MANGA_ID + " TEXT PRIMARY KEY)";
 
         db.execSQL(CREATE_MANGAS_TABLE);
+        db.execSQL(CREATE_GENRES_TABLE);
         db.execSQL(CREATE_LIKES_TABLE);
         db.execSQL(CREATE_DISLIKES_TABLE);
         db.execSQL(CREATE_RECS_TABLE);
@@ -70,6 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MANGAS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GENRES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_DISLIKES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECS);
@@ -94,6 +102,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Inserting Row
         db.insert(TABLE_MANGAS, null, values);
         db.close(); // Closing database connection
+    }
+
+    public void addGenre(String genreId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_GENRE_ID, genreId);
+        db.insert(TABLE_GENRES, null, values);
+        db.close();
     }
 
     public void addLike(String mangaId) {
@@ -208,6 +224,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return hasObject;
+    }
+
+    public List<String> getAllGenres() {
+        ArrayList<String> genres = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TABLE_GENRES;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                genres.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return genres;
     }
 
     public List<SqlMangaModel> getAllLikes() {
