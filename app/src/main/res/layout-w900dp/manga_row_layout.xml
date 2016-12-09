@@ -47,7 +47,7 @@
                 android:layout_toRightOf="@+id/thumbnail"
                 android:textColor="@color/dark"
                 android:typeface="sans"
-                android:textSize="@dimen/text_size"
+                android:textSize="15dp"
                 android:textStyle="bold" />
 
             <!-- Author Name -->
@@ -85,7 +85,7 @@
                 android:id="@+id/trash_can"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/delete"
+                android:src="@drawable/delete_tablet"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/manga_title"
                 android:gravity="center"

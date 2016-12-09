@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
-        android:textSize="30sp"
+        android:textSize="@dimen/fragment_text_size"
         android:textColor="@color/dark"
         android:gravity="center_vertical"/>
 
