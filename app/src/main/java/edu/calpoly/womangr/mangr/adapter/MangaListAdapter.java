@@ -76,14 +76,14 @@ public class MangaListAdapter extends RecyclerView.Adapter<MangaListAdapter.View
                                             public void onClick(DialogInterface dialog, int which) {
                                                 DatabaseHandler db = new DatabaseHandler(context);
                                                 if (listType.equals("likes")) {
-                                                    db.deleteLike(manga.getHref());
+                                                    db.deleteLike(manga.getMangaId());
                                                     if (likes_twoPane == true) {
                                                         FragmentManager fm = ((LikesActivity) context).getSupportFragmentManager();
                                                         fm.beginTransaction().remove(fm.findFragmentById(R.id.likes_fragment)).commit();
                                                     }
                                                 }
                                                 else if (listType.equals("dislikes")) {
-                                                    db.deleteDislike(manga.getHref());
+                                                    db.deleteDislike(manga.getMangaId());
                                                     if (dislikes_twoPane == true) {
                                                         FragmentManager fm = ((DislikesActivity)context).getSupportFragmentManager();
                                                         fm.beginTransaction().remove(fm.findFragmentById(R.id.dislikes_fragment)).commit();

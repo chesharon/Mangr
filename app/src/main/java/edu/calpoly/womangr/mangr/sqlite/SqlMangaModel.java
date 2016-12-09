@@ -1,10 +1,7 @@
 package edu.calpoly.womangr.mangr.sqlite;
 
-import android.content.Context;
-
-import java.util.List;
-
 public class SqlMangaModel {
+    private String mangaId;
     private String name;
     private String href;
     private String author;
@@ -20,8 +17,9 @@ public class SqlMangaModel {
     }
 
     // Constructor
-    public SqlMangaModel(String name, String href, String author, String artist, String status,
-                         String genres, String info, String cover) {
+    public SqlMangaModel(String mangaId, String name, String href, String author, String artist,
+                         String status, String genres, String info, String cover) {
+        this.mangaId = mangaId;
         this.name = name;
         this.href = href;
         this.author = author;
@@ -30,6 +28,14 @@ public class SqlMangaModel {
         this.genres = genres;
         this.info = info;
         this.cover = cover;
+    }
+
+    public String getMangaId() {
+        return mangaId;
+    }
+
+    public void setMangaId(String mangaId) {
+        this.mangaId = mangaId;
     }
 
     public String getHref() {

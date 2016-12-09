@@ -15,6 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // TODO: strip some columns out as not needed
     // Mangas table
+    private static final String KEY_MANGA_ID = "mangaId";
     private static final String TABLE_MANGAS = "manga";
     private static final String KEY_NAME = "name";
     private static final String KEY_HREF = "href";
@@ -32,9 +33,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_GENRES = "genres";
     private static final String KEY_GENRE_ID = "genreId";
 
-    // Likes table
+    // Likes table. Reuses KEY_MANGA_ID
     private static final String TABLE_LIKES = "likes";
-    private static final String KEY_MANGA_ID = "mangaId";
 
     // Dislikes table. Reuses KEY_MANGA_ID
     private static final String TABLE_DISLIKES = "dislikes";
@@ -50,8 +50,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_MANGAS_TABLE = "CREATE TABLE " + TABLE_MANGAS + "("
+                + KEY_MANGA_ID + " TEXT PRIMARY KEY,"
                 + KEY_NAME + " TEXT,"
-                + KEY_HREF + " TEXT PRIMARY KEY,"
+                + KEY_HREF + " TEXT,"
                 + KEY_AUTHOR + " TEXT,"
                 + KEY_ARTIST + " TEXT," + KEY_STATUS + " TEXT,"
                 + KEY_YEAR + " TEXT," + KEY_GENRES + " TEXT,"
@@ -90,6 +91,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_MANGA_ID, sqlMangaModel.getMangaId());
         values.put(KEY_NAME, sqlMangaModel.getName());
         values.put(KEY_HREF, sqlMangaModel.getHref());
         values.put(KEY_AUTHOR, sqlMangaModel.getAuthor());
@@ -164,9 +166,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_MANGAS,
-                new String[] { KEY_NAME, KEY_HREF, KEY_AUTHOR, KEY_ARTIST, KEY_STATUS,
+                new String[] { KEY_MANGA_ID, KEY_NAME, KEY_HREF, KEY_AUTHOR, KEY_ARTIST, KEY_STATUS,
                         KEY_GENRES, KEY_INFO, KEY_COVER },
-                KEY_HREF + "=?",
+                KEY_MANGA_ID + "=?",
                 new String[] { mangaId }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -174,13 +176,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SqlMangaModel sqlMangaModel = new SqlMangaModel(cursor.getString(0),
                 cursor.getString(1), cursor.getString(2), cursor.getString(3),
                 cursor.getString(4), cursor.getString(5), cursor.getString(6),
-                cursor.getString(7));
+                cursor.getString(7), cursor.getString(8));
         return sqlMangaModel;
     }
 
     public boolean hasManga(String mangaId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String queryString = "SELECT * FROM " + TABLE_MANGAS + " WHERE " + KEY_HREF + " =?";
+        String queryString = "SELECT * FROM " + TABLE_MANGAS + " WHERE " + KEY_MANGA_ID + " =?";
 
         // Add the String you are searching by here.
         // Put it in an array to avoid an unrecognized token error

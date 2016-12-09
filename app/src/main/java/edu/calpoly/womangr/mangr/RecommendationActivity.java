@@ -19,6 +19,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.wenchao.cardstack.CardStack;
 
+import java.util.Collections;
 import java.util.List;
 
 import edu.calpoly.womangr.mangr.adapter.CardsDataAdapter;
@@ -84,9 +85,10 @@ public class RecommendationActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<List<MangaByGenre>> call, Response<List<MangaByGenre>> response) {
                     List<MangaByGenre> mangasByGenres = response.body();
+                    Collections.shuffle(mangasByGenres);
                     int numRecs = 0;
 
-                    for (MangaByGenre m : mangasByGenres) {
+                    for (final MangaByGenre m : mangasByGenres) {
                         // filter out mangas already liked or disliked
                         if (!(db.hasLike(m.getMangaId()) || db.hasDisLike(m.getMangaId()))) {
                             numRecs++;
@@ -102,14 +104,15 @@ public class RecommendationActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Manga> call, Response<Manga> response) {
                                         Manga manga = response.body();
-                                        SqlMangaModel sqlMangaModel = new SqlMangaModel(manga.getName(), manga.getHref(),
-                                                formatInfoList(manga.getAuthor()), formatInfoList(manga.getArtist()),
-                                                formatString(manga.getStatus()), formatInfoList(manga.getGenres()),
+                                        SqlMangaModel sqlMangaModel = new SqlMangaModel(m.getMangaId(),
+                                                manga.getName(), manga.getHref(), formatInfoList(manga.getAuthor()),
+                                                formatInfoList(manga.getArtist()), formatString(manga.getStatus()),
+                                                formatInfoList(manga.getGenres()),
                                                 manga.getInfo(), manga.getCover());
 
                                         db.addManga(sqlMangaModel);
-                                        db.addRecommendation(manga.getHref());
-                                        cardAdapter.add(manga.getHref());
+                                        db.addRecommendation(sqlMangaModel.getMangaId());
+                                        cardAdapter.add(sqlMangaModel.getMangaId());
                                     }
 
                                     @Override
