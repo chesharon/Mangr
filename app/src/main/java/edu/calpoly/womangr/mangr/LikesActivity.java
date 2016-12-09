@@ -49,7 +49,7 @@ public class LikesActivity extends AppCompatActivity {
                 }
                 else {
                     Intent intent = new Intent(LikesActivity.this, MangaDetails.class);
-                    intent.putExtra("mangaId", sqlManga.getHref());
+                    intent.putExtra("mangaId", sqlManga.getMangaId());
                     intent.putExtra("listType", "likes");
                     intent.putExtra("index", position);
                     startActivity(intent);

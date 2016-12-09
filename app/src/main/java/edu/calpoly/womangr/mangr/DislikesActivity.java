@@ -49,7 +49,7 @@ public class DislikesActivity extends AppCompatActivity {
                 }
                 else {
                     Intent intent = new Intent(DislikesActivity.this, MangaDetails.class);
-                    intent.putExtra("mangaId", sqlManga.getHref());
+                    intent.putExtra("mangaId", sqlManga.getMangaId());
                     intent.putExtra("listType", "dislikes");
                     intent.putExtra("index", position);
                     startActivity(intent);
